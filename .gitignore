@@ -1,0 +1,7 @@
+venv/
+.netlify/
+__pycache__/
+settings.json
+sheets_db.json
+students_db.json
+search_logs.py

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinWise AI | Intelligent Loan Eligibility, Credit Analysis & Financial Advisory</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.1.0">
+</head>
+<body>
+    <!-- Background Canvas for Falling 3D Bitcoins -->
+    <canvas id="bitcoin-canvas"></canvas>
+
+    <!-- Live Financial & Sync Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item"><span class="ticker-lbl">FINWISE ENGINE</span> <span class="ticker-price status-green">Active</span> <span class="ticker-change neutral">Ready</span></div>
+            <div class="ticker-item"><span class="ticker-lbl">PERSONAL LOAN RATE</span> <span class="ticker-price">10.5% p.a.</span> <span class="ticker-change neutral">Benchmark</span></div>
+            <div class="ticker-item"><span class="ticker-lbl">CREDIT DISBURSEMENT</span> <span class="ticker-price">Instant AI</span> <span class="ticker-change pos">Approved</span></div>
+            <div class="ticker-item"><span class="ticker-lbl">NIFTY 50</span> <span class="ticker-price">24,312.45</span> <span class="ticker-change pos">+0.85%</span></div>
+            <div class="ticker-item"><span class="ticker-lbl">SENSEX</span> <span class="ticker-price">79,846.10</span> <span class="ticker-change pos">+0.92%</span></div>
+            <div class="ticker-item"><span class="ticker-lbl">SHEETS SYNC</span> <span class="ticker-price" id="ticker-sync-status">Connected</span> <span class="ticker-change neutral">Ready</span></div>
+            <!-- Loop Duplication -->
+            <div class="ticker-item"><span class="ticker-lbl">FINWISE ENGINE</span> <span class="ticker-price status-green">Active</span> <span class="ticker-change neutral">Ready</span></div>
+            <div class="ticker-item"><span class="ticker-lbl">PERSONAL LOAN RATE</span> <span class="ticker-price">10.5% p.a.</span> <span class="ticker-change neutral">Benchmark</span></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="app-wrapper">
+        <!-- Header / Navbar -->
+        <header class="navbar">
+            <div class="logo" id="logo-trigger">
+                <span class="logo-text"><span class="text-gradient">FinWise</span> AI</span>
+                <span class="logo-dot"></span>
+            </div>
+            <nav class="nav-links">
+                <a href="#dashboard" class="nav-link active" data-target="dashboard">Loan Checker</a>
+                <a href="#analyzer" class="nav-link" data-target="analyzer">Credit Analyzer</a>
+                <a href="#calculator" class="nav-link" data-target="calculator">EMI Calculator</a>
+                <a href="#advisory" class="nav-link" data-target="advisory">AI Advisory</a>
+                <a href="#admin" class="nav-link" data-target="admin">Admin Panel</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="btn-sync-now">🔄 Sync Sheets</button>
+            </div>
+        </header>
+
+        <!-- Pages Wrapper -->
+        <main class="content-wrapper">
+            
+            <!-- Section 1: Loan Eligibility Checker -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <span class="glow-tag">BFSI INSIGHTS</span>
+                    <h2>Intelligent Loan <span class="text-gradient">Eligibility Checker</span></h2>
+                    <p class="section-desc">
+                        Submit applicant credentials to run real-time credit checks, proposed DTI ratio evaluations, and risk classification powered by Claude AI.
+                    </p>
+                </div>
+
+                <!-- KPI Mini-Dashboard -->
+                <div class="kpi-grid">
+                    <div class="card glass-card kpi-card">
+                        <div class="card-shine"></div>
+                        <div class="kpi-content">
+                            <span class="kpi-icon">📋</span>
+                            <div class="kpi-data">
+                                <span class="kpi-num" id="stat-total-apps">0</span>
+                                <span class="kpi-lbl">Total Checks</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card glass-card kpi-card">
+                        <div class="card-shine"></div>
+                        <div class="kpi-content">
+                            <span class="kpi-icon">💰</span>
+                            <div class="kpi-data">
+                                <span class="kpi-num" id="stat-avg-loan">₹0</span>
+                                <span class="kpi-lbl">Avg Approved Loan</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card glass-card kpi-card">
+                        <div class="card-shine"></div>
+                        <div class="kpi-content">
+                            <span class="kpi-icon">⚠️</span>
+                            <div class="kpi-data">
+                                <span class="kpi-num" id="stat-high-risk">0%</span>
+                                <span class="kpi-lbl">High Risk Ratio</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card glass-card kpi-card">
+                        <div class="card-shine"></div>
+                        <div class="kpi-content">
+                            <span class="kpi-icon">📊</span>
+                            <div class="kpi-data">
+                                <span class="kpi-num" id="stat-sync-rate">0%</span>
+                                <span class="kpi-lbl">Google Sheets Sync</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Split Form & Results Layout -->
+                <div class="tool-split">
+                    <!-- Application Form Card -->
+                    <div class="card glass-card form-container-card">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>Application Profile</h2>
+                        </div>
+                        <form id="loan-eligibility-form">
+                            <div class="form-group">
+                                <label for="app-name">Applicant Full Name</label>
+                                <input type="text" id="app-name" placeholder="Enter full name" required value="Prasanna Kumar">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="app-salary">Monthly Income (₹)</label>
+                                    <input type="number" id="app-salary" placeholder="e.g. 45000" required value="45000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="app-score">Credit Score (300-850)</label>
+                                    <input type="number" id="app-score" placeholder="e.g. 730" min="300" max="850" required value="730">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="app-emi">Existing Monthly EMIs (₹)</label>
+                                    <input type="number" id="app-emi" placeholder="e.g. 0" required value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="app-loan">Requested Loan Amount (₹)</label>
+                                    <input type="number" id="app-loan" placeholder="e.g. 900000" required value="900000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="app-tenure">Desired Tenure (Months)</label>
+                                <select id="app-tenure">
+                                    <option value="12">12 Months (1 Year)</option>
+                                    <option value="24">24 Months (2 Years)</option>
+                                    <option value="36">36 Months (3 Years)</option>
+                                    <option value="48">48 Months (4 Years)</option>
+                                    <option value="60">60 Months (5 Years)</option>
+                                    <option value="72" selected>72 Months (6 Years)</option>
+                                    <option value="120">120 Months (10 Years)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-app">Evaluate Loan Eligibility</button>
+                        </form>
+                    </div>
+
+                    <!-- Evaluation Results Display Card -->
+                    <div class="card glass-card result-display-card inactive" id="eligibility-result-panel">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>AI Evaluation Assessment</h2>
+                            <span class="status-pill" id="result-status-badge">Approved</span>
+                        </div>
+                        <div class="result-body">
+                            <!-- Large Risk Meter Indicator -->
+                            <div class="risk-meter-section">
+                                <div class="risk-label-group">
+                                    <span class="risk-value" id="result-risk-level">LOW RISK</span>
+                                    <span class="risk-desc">Credit Risk Rating</span>
+                                </div>
+                                <div class="dti-stats">
+                                    <span class="dti-num" id="result-dti-ratio">37.6%</span>
+                                    <span class="dti-lbl">Proposed DTI Ratio</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Financial Details Grid -->
+                            <div class="result-details-grid">
+                                <div class="res-item">
+                                    <span class="res-lbl">Applicable Rate</span>
+                                    <span class="res-val" id="result-rate">10.5% p.a.</span>
+                                </div>
+                                <div class="res-item">
+                                    <span class="res-lbl">Proposed Monthly EMI</span>
+                                    <span class="res-val" id="result-proposed-emi">₹16,928</span>
+                                </div>
+                                <div class="res-item col-span-2 highlight-box">
+                                    <span class="res-lbl">Max Eligible Credit Limit</span>
+                                    <span class="res-val text-gradient" id="result-eligible-amt">₹9,00,000</span>
+                                </div>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <!-- AI Reasoning Bullet Points -->
+                            <div class="reasoning-container">
+                                <h3>💡 Real-time Claude AI Analysis</h3>
+                                <ul class="reasoning-list" id="result-reasoning-list">
+                                    <li>Application approved based on stable Debt-to-Income (DTI) ratio of 37.6%.</li>
+                                    <li>Your credit score of 730 qualifies you for a competitive interest rate of 10.5%.</li>
+                                </ul>
+                            </div>
+
+                            <div class="result-action-panel" id="result-rejection-advice" style="display:none;">
+                                <div class="alert-box">
+                                    <span class="alert-icon">⚠️</span>
+                                    <p>Low credit score detected. Explore our **Credit Score Analyzer** or visit **AI Financial Tips** for customized score rebuild advice.</p>
+                                </div>
+                                <button class="btn btn-secondary btn-block mt-3" id="btn-jump-credit-analyzer">Explore Credit Score Analyzer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Credit Score Analyzer -->
+            <section id="analyzer" class="section">
+                <div class="section-header">
+                    <span class="glow-tag">CREDIT REBUILD</span>
+                    <h2>Credit Score <span class="text-gradient">Analyzer</span></h2>
+                    <p class="section-desc">
+                        Visualize your credit standing, analyze score components, and receive structured action plans to lift your credit worthiness.
+                    </p>
+                </div>
+
+                <div class="tool-split">
+                    <!-- Input & Visual Gauge Panel -->
+                    <div class="card glass-card flex-col align-center">
+                        <div class="card-shine"></div>
+                        <div class="card-header width-full">
+                            <h2>FICO/CIBIL Standings</h2>
+                        </div>
+                        <div class="gauge-card-body">
+                            <!-- Visual Gauge Widget -->
+                            <div class="credit-gauge-container">
+                                <div class="credit-gauge">
+                                    <div class="gauge-arc"></div>
+                                    <div class="gauge-pointer" id="gauge-pointer" style="transform: rotate(92deg);"></div>
+                                </div>
+                                <div class="gauge-center">
+                                    <span class="gauge-score" id="analyzer-score-display">730</span>
+                                    <span class="gauge-status" id="analyzer-status-display">Good</span>
+                                </div>
+                            </div>
+
+                            <!-- Score Input controls -->
+                            <div class="gauge-inputs">
+                                <label for="analyzer-input-score">Enter Credit Score</label>
+                                <div class="input-action-group">
+                                    <input type="number" id="analyzer-input-score" value="730" min="300" max="850">
+                                    <button class="btn btn-primary" id="btn-analyze-score">Analyze</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Structured Actionable Recommendations Panel -->
+                    <div class="card glass-card">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>Key Score Impact Analysis</h2>
+                        </div>
+                        <div class="analyzer-details-body">
+                            <div class="impact-metrics-grid">
+                                <div class="impact-item">
+                                    <span class="impact-lbl">Payment History (35%)</span>
+                                    <div class="impact-progress-bar"><div class="bar-fill bg-emerald" id="bar-pay-history" style="width: 85%;"></div></div>
+                                </div>
+                                <div class="impact-item">
+                                    <span class="impact-lbl">Credit Utilization (30%)</span>
+                                    <div class="impact-progress-bar"><div class="bar-fill bg-sky" id="bar-credit-util" style="width: 78%;"></div></div>
+                                </div>
+                                <div class="impact-item">
+                                    <span class="impact-lbl">Length of History (15%)</span>
+                                    <div class="impact-progress-bar"><div class="bar-fill bg-purple" id="bar-credit-len" style="width: 65%;"></div></div>
+                                </div>
+                                <div class="impact-item">
+                                    <span class="impact-lbl">Credit Mix & New Lines (20%)</span>
+                                    <div class="impact-progress-bar"><div class="bar-fill bg-amber" id="bar-credit-mix" style="width: 50%;"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="rec-section">
+                                <h3 class="rec-title">💡 Actionable Improvement Steps</h3>
+                                <ul class="rec-list" id="analyzer-rec-list">
+                                    <!-- Populated dynamically by app.js -->
+                                    <li>Set up automated calendar alerts to prevent missed credit card installments.</li>
+                                    <li>Pre-pay outstanding balances before credit statements generate to report under 30% utilization.</li>
+                                </ul>
+                                <button class="btn btn-secondary mt-3" id="btn-advisor-jump">Ask AI Tips for Score Improvement</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: EMI Calculator -->
+            <section id="calculator" class="section">
+                <div class="section-header">
+                    <span class="glow-tag">FINANCIAL PLANNING</span>
+                    <h2>Loan EMI <span class="text-gradient">Calculator</span></h2>
+                    <p class="section-desc">
+                        Simulate variables of mortgage, auto, or personal loans to review full payment schedules, total interest, and principal weight.
+                    </p>
+                </div>
+
+                <div class="tool-split">
+                    <!-- Left: Sliders Panel -->
+                    <div class="card glass-card">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>Loan Variables</h2>
+                        </div>
+                        <div class="calculator-inputs">
+                            <!-- Slider 1 -->
+                            <div class="slider-group">
+                                <div class="slider-label-row">
+                                    <label for="slider-amt">Loan Principal Amount</label>
+                                    <span class="slider-val-box">₹<input type="number" id="num-amt" value="500000" min="10000" max="10000000"></span>
+                                </div>
+                                <input type="range" id="slider-amt" min="50000" max="2500000" step="10000" value="500000">
+                                <div class="slider-limits"><span>₹50K</span><span>₹25L</span></div>
+                            </div>
+                            <!-- Slider 2 -->
+                            <div class="slider-group">
+                                <div class="slider-label-row">
+                                    <label for="slider-rate">Interest Rate (% p.a.)</label>
+                                    <span class="slider-val-box"><input type="number" id="num-rate" value="10.5" step="0.1" min="1" max="30">%</span>
+                                </div>
+                                <input type="range" id="slider-rate" min="5" max="25" step="0.1" value="10.5">
+                                <div class="slider-limits"><span>5%</span><span>25%</span></div>
+                            </div>
+                            <!-- Slider 3 -->
+                            <div class="slider-group">
+                                <div class="slider-label-row">
+                                    <label for="slider-tenure">Tenure (Months)</label>
+                                    <span class="slider-val-box"><input type="number" id="num-tenure" value="60" min="3" max="360"> M</span>
+                                </div>
+                                <input type="range" id="slider-tenure" min="6" max="120" step="6" value="60">
+                                <div class="slider-limits"><span>6 M</span><span>120 M</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: EMI Results Breakdown & SVG Pie Chart -->
+                    <div class="card glass-card flex-col">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>Payment Summary</h2>
+                        </div>
+                        <div class="calculator-summary-body">
+                            <!-- Values Grid -->
+                            <div class="emi-summary-row">
+                                <div class="kpi-mini">
+                                    <span class="kpi-mini-lbl">Monthly EMI</span>
+                                    <span class="kpi-mini-val text-gradient" id="emi-monthly-val">₹10,747</span>
+                                </div>
+                                <div class="kpi-mini">
+                                    <span class="kpi-mini-lbl">Total Interest</span>
+                                    <span class="kpi-mini-val" id="emi-interest-val">₹1,44,820</span>
+                                </div>
+                                <div class="kpi-mini">
+                                    <span class="kpi-mini-lbl">Total Payable</span>
+                                    <span class="kpi-mini-val" id="emi-total-val">₹6,44,820</span>
+                                </div>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <!-- SVG Pie Chart Layout -->
+                            <div class="donut-chart-row mt-2">
+                                <div class="donut-chart-container">
+                                    <svg viewBox="0 0 36 36" class="circular-svg">
+                                        <circle class="circle-bg" cx="18" cy="18" r="15.9155" />
+                                        <circle class="circle-fill-1" id="emi-pie-principal" stroke-dasharray="77.5, 100" cx="18" cy="18" r="15.9155" />
+                                        <circle class="circle-fill-2" id="emi-pie-interest" stroke-dasharray="22.5, 100" stroke-dashoffset="77.5" cx="18" cy="18" r="15.9155" />
+                                    </svg>
+                                    <div class="donut-center-text">
+                                        <span class="donut-num" id="donut-split-ratio">77.5%</span>
+                                        <span class="donut-lbl">Principal Share</span>
+                                    </div>
+                                </div>
+                                <div class="donut-legend">
+                                    <div class="legend-item"><span class="legend-dot pass-color"></span> Principal (₹5,00,000)</div>
+                                    <div class="legend-item"><span class="legend-dot fail-color"></span> Total Interest (₹1,44,820)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amortization Schedule Table -->
+                <div class="card glass-card mt-4">
+                    <div class="card-shine"></div>
+                    <div class="card-header flex-row space-between">
+                        <h2>Amortization Breakup Schedule</h2>
+                        <button class="btn btn-secondary btn-sm" id="btn-export-amort">📥 Export CSV</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="amortization-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Opening Balance</th>
+                                    <th>EMI Paid</th>
+                                    <th>Principal Component</th>
+                                    <th>Interest Component</th>
+                                    <th>Closing Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows via app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: AI Financial Tips & Advisory -->
+            <section id="advisory" class="section">
+                <div class="section-header">
+                    <span class="glow-tag">AI INTELLIGENCE</span>
+                    <h2>AI Financial <span class="text-gradient">Advisory Console</span></h2>
+                    <p class="section-desc">
+                        Consult FinWise AI, powered by Claude. Enter questions or tap pre-composed finance queries to generate optimized advisory roadmaps.
+                    </p>
+                </div>
+
+                <div class="card glass-card chatbot-card">
+                    <div class="card-shine"></div>
+                    <!-- Sidebar list of quick queries -->
+                    <div class="chatbot-sidebar">
+                        <h3>⚡ Quick Queries</h3>
+                        <div class="preset-prompts-list">
+                            <button class="preset-btn" data-query="How can I improve my credit score from 580?">💡 Improve Credit Score from 580</button>
+                            <button class="preset-btn" data-query="Strategies to consolidate existing high-interest EMIs?">📈 Debt Consolidation Strategies</button>
+                            <button class="preset-btn" data-query="Explain the 50/30/20 budgeting rule with salary 45000.">📊 Budget 50/30/20 Rule</button>
+                            <button class="preset-btn" data-query="What emergency buffer should I set up for safety?">🛡️ Emergency Buffer Setup</button>
+                        </div>
+                    </div>
+
+                    <!-- Chat display area -->
+                    <div class="chatbot-content">
+                        <!-- Chatbot Header with Clear & Back options -->
+                        <div class="chatbot-header">
+                            <div class="chatbot-header-title">
+                                <span class="pulse-indicator"></span>
+                                <h3>FinWise AI Financial Advisor</h3>
+                            </div>
+                            <div class="chatbot-header-actions">
+                                <button class="btn btn-secondary btn-sm" id="btn-back-to-analyzer">⬅️ Back to Analyzer</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-clear-chat">🧹 Clear Chat</button>
+                            </div>
+                        </div>
+
+                        <div class="chat-conversation" id="chat-conversation-area">
+                            <div class="chat-bubble bot-bubble">
+                                <span class="chat-time">Just Now</span>
+                                <h4>👋 Hello! I am FinWise AI, your financial assistant.</h4>
+                                <p>Ask me details regarding debt consolidation, mortgage evaluation, FICO improvement, or household budgeting. Tap any quick query or type in your parameters below.</p>
+                            </div>
+                        </div>
+
+                        <!-- Chat input footer -->
+                        <div class="chat-input-bar">
+                            <input type="text" id="chat-user-input" placeholder="Type your financial query or parameters here...">
+                            <button class="btn btn-primary" id="btn-send-chat">Consult AI</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Admin Panel & Sheets Sync Configuration -->
+            <section id="admin" class="section">
+                <div class="section-header">
+                    <span class="glow-tag">ADMIN OPERATIONS</span>
+                    <h2>System Administration & <span class="text-gradient">Google Sheets Integration</span></h2>
+                    <p class="section-desc">
+                        Manage local application caches, review sync progress metrics, and update Claude AI API key bindings.
+                    </p>
+                </div>
+
+                <div class="tool-split">
+                    <!-- Sheets Sync Configuration Cards -->
+                    <div class="card glass-card">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>Integration Parameters</h2>
+                        </div>
+                        <form id="settings-credentials-form">
+                            <div class="form-group">
+                                <label for="settings-api-key">Anthropic API Key (Claude)</label>
+                                <input type="password" id="settings-api-key" placeholder="Enter key (e.g. sk-ant-...)">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-sheet-id">Google Spreadsheet ID</label>
+                                <input type="text" id="settings-sheet-id" placeholder="Enter Spreadsheet ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-creds-json">Google Service Account Credentials (JSON)</label>
+                                <textarea id="settings-creds-json" rows="4" placeholder='Paste full Service Account JSON credential string here...'></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Save Configuration</button>
+                        </form>
+                    </div>
+
+                    <!-- DB Controls & Reset Section -->
+                    <div class="card glass-card flex-col space-between">
+                        <div class="card-shine"></div>
+                        <div class="card-header">
+                            <h2>Database Sync Statistics</h2>
+                        </div>
+                        <div class="db-sync-stats-box">
+                            <div class="sync-kpi-row">
+                                <div class="sync-metric-num" id="admin-unsynced-count">0</div>
+                                <span class="sync-metric-lbl">Unsynced Applications</span>
+                            </div>
+                            <p class="sync-description-text">
+                                System tracks applications in a local cache. When synchronized, all pending rows append directly to your Google Sheets document.
+                            </p>
+                        </div>
+                        <div class="db-action-buttons">
+                            <button class="btn btn-primary btn-block mb-3" id="btn-admin-sync">🔄 Synchronize Database Now</button>
+                            <button class="btn btn-secondary btn-block btn-danger" id="btn-admin-reset">🗑️ Reset Logs Database</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cache Applications Log Table -->
+                <div class="card glass-card mt-4">
+                    <div class="card-shine"></div>
+                    <div class="card-header">
+                        <h2>Local Applications Records</h2>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="admin-applications-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Applicant Name</th>
+                                    <th>Monthly Income</th>
+                                    <th>FICO Score</th>
+                                    <th>EMIs</th>
+                                    <th>Requested Loan</th>
+                                    <th>Status</th>
+                                    <th>Risk Rating</th>
+                                    <th>Sheets Sync</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows via app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 FinWise AI Financial Advisory Platform. Powered by Claude AI & FastAPI.</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-notification" class="toast">
+        <span id="toast-message">Notification Message</span>
+    </div>
+
+    <!-- App JavaScript -->
+    <script src="app.js?v=1.1.1"></script>
+</body>
+</html>
