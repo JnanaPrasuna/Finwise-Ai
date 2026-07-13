@@ -3,6 +3,13 @@
 FinWise AI is an AI-powered financial assistant that helps users evaluate loan eligibility, analyze credit scores, calculate EMI, and receive personalized financial guidance. The platform combines an interactive frontend with a FastAPI backend and AI-powered recommendations to create a modern digital banking experience.
 
 ---
+## 🌐 Live Demo
+
+🔗 **Live Application:** https://sensational-selkie-59db0b.netlify.app/
+
+
+
+
 
 ## 🚀 Features
 
